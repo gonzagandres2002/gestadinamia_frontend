@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const navLinks = [
   { label: "Inicio", href: "#inicio" },
@@ -12,7 +13,21 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("gestadinamia_token"));
+  }, []);
+
+  function handleLogout() {
+    localStorage.removeItem("gestadinamia_token");
+    localStorage.removeItem("gestadinamia_role");
+    setIsLoggedIn(false);
+    setMenuOpen(false);
+    router.push("/");
+  }
 
   return (
     <nav className="fixed top-0 w-full z-50 border-b border-emerald-200/20 bg-[#0b2f1a]/82 backdrop-blur-xl">
@@ -44,12 +59,30 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <Link
-            href="/login"
-            className="inline-flex items-center justify-center rounded-full border border-emerald-200/40 bg-emerald-300/15 px-4 py-2 text-sm font-medium text-emerald-100 transition-colors hover:bg-emerald-300/25"
-          >
-            Iniciar sesion
-          </Link>
+
+          {isLoggedIn ? (
+            <div className="flex items-center gap-2">
+              <Link
+                href="/predict"
+                className="inline-flex items-center justify-center rounded-full bg-emerald-500/90 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-500"
+              >
+                Predicción THAE
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/8 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/15"
+              >
+                Salir
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center rounded-full border border-emerald-200/40 bg-emerald-300/15 px-4 py-2 text-sm font-medium text-emerald-100 transition-colors hover:bg-emerald-300/25"
+            >
+              Iniciar sesion
+            </Link>
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -86,13 +119,31 @@ export default function Navbar() {
               </li>
             ))}
             <li className="pt-1">
-              <Link
-                href="/login"
-                onClick={() => setMenuOpen(false)}
-                className="block rounded-lg border border-emerald-200/35 bg-emerald-300/15 px-3 py-2 font-medium text-emerald-100 transition-colors hover:bg-emerald-300/25"
-              >
-                Iniciar sesion
-              </Link>
+              {isLoggedIn ? (
+                <div className="flex flex-col gap-2">
+                  <Link
+                    href="/predict"
+                    onClick={() => setMenuOpen(false)}
+                    className="block rounded-lg bg-emerald-500/90 px-3 py-2 font-medium text-white transition-colors hover:bg-emerald-500"
+                  >
+                    Predicción THAE
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full rounded-lg border border-white/20 px-3 py-2 text-left font-medium text-white/70 transition-colors hover:bg-white/10"
+                  >
+                    Cerrar sesión
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="block rounded-lg border border-emerald-200/35 bg-emerald-300/15 px-3 py-2 font-medium text-emerald-100 transition-colors hover:bg-emerald-300/25"
+                >
+                  Iniciar sesion
+                </Link>
+              )}
             </li>
           </ul>
         </div>

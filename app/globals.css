@@ -7,6 +7,8 @@
   --color-gray-light: #f7f7f7;
   --color-gray-border: #e5e5e5;
   --font-serif: var(--font-lora);
+  --font-sans: var(--font-fira-sans);
+  --font-mono: var(--font-fira-code);
 }
 
 html {
@@ -17,4 +19,20 @@ body {
   background-color: #ffffff;
   color: var(--color-text);
   font-family: var(--font-serif), ui-serif, Georgia, serif;
+}
+
+/* Dashboard area uses sans-serif (Fira Sans) for data density & legibility */
+.font-sans {
+  font-family: var(--font-fira-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.font-mono {
+  font-family: var(--font-fira-code), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

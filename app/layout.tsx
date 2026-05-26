@@ -1,9 +1,23 @@
 import type { Metadata } from "next";
-import { Lora } from "next/font/google";
+import { Fira_Code, Fira_Sans, Lora } from "next/font/google";
 import "./globals.css";
 
 const lora = Lora({
   variable: "--font-lora",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+const firaSans = Fira_Sans({
+  variable: "--font-fira-sans",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const firaCode = Fira_Code({
+  variable: "--font-fira-code",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   display: "swap",
@@ -23,7 +37,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${lora.variable} antialiased`}>{children}</body>
+      <body
+        className={`${lora.variable} ${firaSans.variable} ${firaCode.variable} antialiased`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

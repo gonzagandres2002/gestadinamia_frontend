@@ -1,17 +1,44 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("http://localhost:8000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.detail ?? "Credenciales incorrectas");
+        return;
+      }
+
+      const { access_token, role } = await res.json();
+      localStorage.setItem("gestadinamia_token", access_token);
+      localStorage.setItem("gestadinamia_role", role);
+      router.push("/predict");
+    } catch {
+      setError("No se pudo conectar al servidor. Verifique que el backend esté activo.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -70,73 +97,61 @@ export default function LoginPage() {
           </section>
 
           <section className="rounded-2xl border border-white/15 bg-white/95 p-6 shadow-[0_20px_40px_rgba(7,16,24,0.36)] lg:p-8">
-            {submitted ? (
-              <div className="flex min-h-[360px] items-center justify-center">
-                <div className="text-center">
-                  <p className="mb-2 text-2xl font-semibold text-primary">
-                    Sesion iniciada
-                  </p>
-                  <p className="text-text/70">
-                    Esta demo no esta conectada a backend aun.
-                  </p>
-                  <Link
-                    href="/"
-                    className="mt-6 inline-flex rounded-lg bg-primary px-5 py-2.5 font-medium text-white transition-colors hover:bg-primary-light"
-                  >
-                    Volver al inicio
-                  </Link>
-                </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="mb-1 block text-sm font-medium text-text">
+                  Correo institucional
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="usuario@institucion.edu"
+                  className="w-full rounded-lg border border-gray-border bg-white px-4 py-3 text-text transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                />
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="email" className="mb-1 block text-sm font-medium text-text">
-                    Correo institucional
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="usuario@institucion.edu"
-                    className="w-full rounded-lg border border-gray-border bg-white px-4 py-3 text-text transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
 
-                <div>
-                  <label htmlFor="password" className="mb-1 block text-sm font-medium text-text">
-                    Contraseña
-                  </label>
-                  <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    placeholder="********"
-                    className="w-full rounded-lg border border-gray-border bg-white px-4 py-3 text-text transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
+              <div>
+                <label htmlFor="password" className="mb-1 block text-sm font-medium text-text">
+                  Contraseña
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="********"
+                  className="w-full rounded-lg border border-gray-border bg-white px-4 py-3 text-text transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
 
-                <div className="flex items-center justify-between pt-1 text-sm">
-                  <label className="inline-flex items-center gap-2 text-text/75">
-                    <input type="checkbox" className="h-4 w-4 rounded border-gray-border" />
-                    Recordarme
-                  </label>
-                  <a href="#" className="text-primary hover:text-primary-light">
-                    Olvide mi contraseña
-                  </a>
-                </div>
+              {error && (
+                <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
+                </p>
+              )}
 
-                <button
-                  type="submit"
-                  className="w-full rounded-xl bg-primary px-6 py-3.5 font-medium text-white shadow-[0_12px_30px_rgba(18,92,40,0.3)] transition-colors hover:bg-primary-light"
-                >
-                  Iniciar sesion
-                </button>
-              </form>
-            )}
+              <div className="flex items-center justify-between pt-1 text-sm">
+                <label className="inline-flex items-center gap-2 text-text/75">
+                  <input type="checkbox" className="h-4 w-4 rounded border-gray-border" />
+                  Recordarme
+                </label>
+                <a href="#" className="text-primary hover:text-primary-light">
+                  Olvide mi contraseña
+                </a>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-xl bg-primary px-6 py-3.5 font-medium text-white shadow-[0_12px_30px_rgba(18,92,40,0.3)] transition-colors hover:bg-primary-light disabled:opacity-60"
+              >
+                {loading ? "Iniciando sesion..." : "Iniciar sesion"}
+              </button>
+            </form>
           </section>
         </div>
       </div>
