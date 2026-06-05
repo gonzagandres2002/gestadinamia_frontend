@@ -18,7 +18,8 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:8000/auth/login", {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+      const res = await fetch(`${apiBase}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -33,7 +34,8 @@ export default function LoginPage() {
       const { access_token, role } = await res.json();
       localStorage.setItem("gestadinamia_token", access_token);
       localStorage.setItem("gestadinamia_role", role);
-      router.push("/predict");
+      sessionStorage.setItem("gestadinamia_welcome", "1");
+      router.push("/dashboard");
     } catch {
       setError("No se pudo conectar al servidor. Verifique que el backend esté activo.");
     } finally {

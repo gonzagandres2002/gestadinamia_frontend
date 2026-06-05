@@ -18,50 +18,6 @@ type Features = Record<string, string>;
 
 const DEMOGRAPHICS = [
   {
-    key: "pa_inicial",
-    label: "Presión arterial inicial",
-    type: "select" as const,
-    options: [
-      { value: "N", label: "Normal" },
-      { value: "E", label: "Elevada" },
-      { value: "HTA1", label: "HTA Grado 1" },
-      { value: "HTA2", label: "HTA Grado 2" },
-    ],
-  },
-  {
-    key: "etnia",
-    label: "Etnia",
-    type: "select" as const,
-    options: [
-      { value: "mest", label: "Mestiza" },
-      { value: "Afro", label: "Afrocolombiana" },
-      { value: "indg", label: "Indígena" },
-      { value: "N", label: "No especificada" },
-      { value: "E", label: "Extranjera" },
-    ],
-  },
-  {
-    key: "imc_ingreso",
-    label: "IMC al ingreso",
-    type: "select" as const,
-    options: [
-      { value: "Bp", label: "Bajo peso" },
-      { value: "Ad", label: "Adecuado" },
-      { value: "Sp", label: "Sobrepeso" },
-      { value: "Ob", label: "Obesidad" },
-    ],
-  },
-  {
-    key: "edad_categoria",
-    label: "Categoría de edad",
-    type: "select" as const,
-    options: [
-      { value: "1", label: "Joven (< 20 años)" },
-      { value: "2", label: "Adulta (20–35 años)" },
-      { value: "3", label: "Mayor (> 35 años)" },
-    ],
-  },
-  {
     key: "gestas_previas_categoria",
     label: "Gestas previas",
     type: "select" as const,
@@ -94,23 +50,14 @@ interface MeasurementDef {
 }
 
 const MEASUREMENTS: MeasurementDef[] = [
-  { base: "peso_momento", label: "Peso", unit: "kg", step: "0.1", startMomento: 1 },
-  { base: "imc_momento", label: "IMC", unit: "kg/m²", step: "0.01", startMomento: 1 },
+  { base: "peso_momento", label: "Peso", unit: "kg", step: "0.1", startMomento: 2 },
+  { base: "imc_momento", label: "IMC", unit: "kg/m²", step: "0.01", startMomento: 2 },
   { base: "pas_momento", label: "PAS", unit: "mmHg", step: "1", startMomento: 1 },
-  { base: "pad_momento", label: "PAD", unit: "mmHg", step: "1", startMomento: 1 },
+  { base: "pad_momento", label: "PAD", unit: "mmHg", step: "1", startMomento: 2 },
   { base: "pam_momento", label: "PAM", unit: "mmHg", step: "0.1", startMomento: 1 },
-  { base: "cru_momento", label: "Creatinina Cru", unit: "mg/24h", step: "0.1", startMomento: 1 },
-  { base: "au_cru_momento", label: "Albuminuria Cru", unit: "mg/24h", step: "0.1", startMomento: 1 },
-  { base: "sulf_cru_momento", label: "Sulfato Cru", unit: "", step: "0.001", startMomento: 1 },
-  { base: "sg_momento_", label: "Densidad urinaria", unit: "", step: "0.1", startMomento: 1 },
-  { base: "au_sg_momento", label: "Albuminuria SG", unit: "mg/24h", step: "0.1", startMomento: 2 },
-  { base: "sulf_sg_momento", label: "Sulfato SG", unit: "", step: "0.001", startMomento: 1 },
-  { base: "ph_momento", label: "pH urinario", unit: "", step: "0.1", startMomento: 1 },
-  { base: "fc_momento", label: "Frec. cardíaca", unit: "lpm", step: "1", startMomento: 2 },
 ];
 
 function fieldKey(base: string, momento: number): string {
-  if (base === "sg_momento_") return `sg_momento_${momento}`;
   return `${base}${momento}`;
 }
 
@@ -144,14 +91,12 @@ export default function PredictPage() {
     setError("");
     setResult(null);
 
-    const numericFeatures: Record<string, string | number | null> = {};
-    const catKeys = new Set(DEMOGRAPHICS.filter((d) => d.type === "select").map((d) => d.key));
+    // All 29 model features are numeric (including the baseline category codes).
+    const numericFeatures: Record<string, number | null> = {};
 
     for (const [k, v] of Object.entries(features)) {
       if (v === "" || v === null || v === undefined) {
         numericFeatures[k] = null;
-      } else if (catKeys.has(k)) {
-        numericFeatures[k] = v;
       } else {
         const n = parseFloat(v);
         numericFeatures[k] = isNaN(n) ? null : n;
@@ -159,7 +104,8 @@ export default function PredictPage() {
     }
 
     try {
-      const res = await fetch("http://localhost:8000/predict", {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+      const res = await fetch(`${apiBase}/predict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

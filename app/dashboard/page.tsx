@@ -3,11 +3,11 @@
 import { useCallback, useState } from "react";
 
 import AlertsBanner from "./components/AlertsBanner";
-import CohortOverview from "./components/CohortOverview";
 import PatientLongitudinalChart from "./components/PatientLongitudinalChart";
 import PatientPicker from "./components/PatientPicker";
 import RiskSummaryCard from "./components/RiskSummaryCard";
 import SeguimientoForm from "./components/SeguimientoForm";
+import WelcomeBanner from "./components/WelcomeBanner";
 
 export default function DashboardPage() {
   const [pacienteId, setPacienteId] = useState<number | null>(null);
@@ -18,6 +18,8 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-5">
+      <WelcomeBanner />
+
       <header>
         <p className="text-[11px] font-medium uppercase tracking-wider text-blue-700">
           Análisis descriptivo
@@ -41,8 +43,6 @@ export default function DashboardPage() {
       <PatientLongitudinalChart pacienteId={pacienteId} refreshKey={refreshKey} />
 
       <SeguimientoForm pacienteId={pacienteId} onSaved={handleSaved} />
-
-      <CohortOverview />
     </div>
   );
 }

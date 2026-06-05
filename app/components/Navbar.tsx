@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,19 +12,32 @@ const navLinks = [
   { label: "Contacto", href: "#contacto" },
 ];
 
+// Fired on logout so the navbar updates without a full reload (same-tab
+// localStorage writes don't emit a native "storage" event).
+const AUTH_EVENT = "gestadinamia-auth-change";
+
+function subscribeAuth(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(AUTH_EVENT, callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(AUTH_EVENT, callback);
+  };
+}
+
 export default function Navbar() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem("gestadinamia_token"));
-  }, []);
+  const isLoggedIn = useSyncExternalStore(
+    subscribeAuth,
+    () => !!localStorage.getItem("gestadinamia_token"),
+    () => false,
+  );
 
   function handleLogout() {
     localStorage.removeItem("gestadinamia_token");
     localStorage.removeItem("gestadinamia_role");
-    setIsLoggedIn(false);
+    window.dispatchEvent(new Event(AUTH_EVENT));
     setMenuOpen(false);
     router.push("/");
   }
@@ -63,10 +76,10 @@ export default function Navbar() {
           {isLoggedIn ? (
             <div className="flex items-center gap-2">
               <Link
-                href="/predict"
+                href="/dashboard"
                 className="inline-flex items-center justify-center rounded-full bg-emerald-500/90 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-500"
               >
-                Predicción THAE
+                Dashboard clínico
               </Link>
               <button
                 onClick={handleLogout}
@@ -122,11 +135,11 @@ export default function Navbar() {
               {isLoggedIn ? (
                 <div className="flex flex-col gap-2">
                   <Link
-                    href="/predict"
+                    href="/dashboard"
                     onClick={() => setMenuOpen(false)}
                     className="block rounded-lg bg-emerald-500/90 px-3 py-2 font-medium text-white transition-colors hover:bg-emerald-500"
                   >
-                    Predicción THAE
+                    Dashboard clínico
                   </Link>
                   <button
                     onClick={handleLogout}

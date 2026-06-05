@@ -36,7 +36,7 @@ function Kpi({ label, value, sub }: { label: string; value: string; sub?: string
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500">{label}</p>
-      <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+      <p className="mt-1 text-2xl font-semibold tabular-nums text-slate-900">{value}</p>
       {sub && <p className="mt-0.5 text-xs text-slate-500">{sub}</p>}
     </div>
   );
@@ -55,13 +55,24 @@ export default function CohortOverview() {
   if (error) {
     return (
       <section className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">
-        Error cargando cohorte: {error}
+        No se pudo cargar la cohorte: {error}
       </section>
     );
   }
   if (!data) {
     return (
-      <section className="h-72 animate-pulse rounded-2xl border border-slate-200 bg-white" aria-label="Cargando cohorte" />
+      <div className="space-y-5" aria-label="Cargando cohorte">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="h-24 animate-pulse rounded-xl border border-slate-200 bg-white" />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="h-64 animate-pulse rounded-xl border border-slate-200 bg-white" />
+          ))}
+        </div>
+      </div>
     );
   }
 
@@ -87,21 +98,7 @@ export default function CohortOverview() {
   }));
 
   return (
-    <section
-      aria-labelledby="cohort-heading"
-      className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-    >
-      <div className="flex items-baseline justify-between">
-        <div>
-          <h2 id="cohort-heading" className="text-lg font-semibold text-slate-900">
-            Vista descriptiva de la cohorte
-          </h2>
-          <p className="text-xs text-slate-500">
-            Estadísticas agregadas — referencia poblacional para situar a cada paciente.
-          </p>
-        </div>
-      </div>
-
+    <div className="space-y-5">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Kpi label="N total de gestantes" value={String(data.n_total)} />
         <Kpi
@@ -196,13 +193,13 @@ export default function CohortOverview() {
           </ResponsiveContainer>
         </ChartCard>
       </div>
-    </section>
+    </div>
   );
 }
 
 function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-3">
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-600">{title}</p>
       {children}
     </div>
