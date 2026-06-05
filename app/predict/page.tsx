@@ -139,10 +139,16 @@ export default function PredictPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-900">Calculadora de riesgo THAE</h1>
-        <p className="mt-1 text-sm text-slate-600">
-          Complete los datos disponibles (todos los campos son opcionales — el modelo imputa los valores faltantes).
+      <div className="mb-8">
+        <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-accent">
+          Calculadora ML
+        </p>
+        <h1 className="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-slate-900">
+          Riesgo de THAE
+        </h1>
+        <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-slate-600">
+          Complete los datos disponibles. Todos los campos son opcionales: el modelo imputa los
+          valores faltantes.
         </p>
       </div>
 

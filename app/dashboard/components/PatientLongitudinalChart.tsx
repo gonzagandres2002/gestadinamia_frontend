@@ -130,10 +130,10 @@ export default function PatientLongitudinalChart({ pacienteId, refreshKey }: Pro
               role="tab"
               aria-selected={variable === v}
               onClick={() => setVariable(v)}
-              className={`cursor-pointer rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+              className={`cursor-pointer rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                 variable === v
-                  ? "border-blue-700 bg-blue-700 text-white"
-                  : "border-slate-300 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50"
+                  ? "border-accent bg-accent text-white"
+                  : "border-slate-300 bg-white text-slate-700 hover:border-accent/40 hover:bg-accent-soft"
               }`}
             >
               {VARIABLE_META[v].label}

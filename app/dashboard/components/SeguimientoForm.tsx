@@ -30,7 +30,7 @@ const FIELD_GROUPS: { title: string; keys: (keyof Seguimiento)[] }[] = [
 ];
 
 const ZONE_BORDER: Record<string, string> = {
-  ok: "border-slate-300 focus:border-blue-700 focus:ring-blue-200",
+  ok: "border-slate-300 focus:border-accent focus:ring-accent/30",
   warn: "border-amber-400 focus:border-amber-500 focus:ring-amber-200",
   danger: "border-rose-500 focus:border-rose-600 focus:ring-rose-200",
 };
@@ -156,7 +156,7 @@ export default function SeguimientoForm({ pacienteId, onSaved }: Props) {
             id="momento"
             value={momento}
             onChange={(e) => setMomento(Number(e.target.value))}
-            className="cursor-pointer rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="cursor-pointer rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
           >
             {[1, 2, 3, 4, 5, 6, 7, 8].map((m) => (
               <option key={m} value={m}>
@@ -187,7 +187,7 @@ export default function SeguimientoForm({ pacienteId, onSaved }: Props) {
                     <label htmlFor={key} className="mb-1 block text-xs font-medium text-slate-700">
                       {meta.label}
                       {meta.unit && <span className="ml-1 text-slate-400">({meta.unit})</span>}
-                      {isPam && <span className="ml-1 text-blue-700">· auto</span>}
+                      {isPam && <span className="ml-1 text-accent">· auto</span>}
                     </label>
                     <input
                       id={key}
@@ -242,7 +242,7 @@ export default function SeguimientoForm({ pacienteId, onSaved }: Props) {
           <button
             type="submit"
             disabled={saving}
-            className="cursor-pointer rounded-xl bg-blue-800 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+            className="cursor-pointer rounded-xl bg-accent-strong px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {saving ? "Guardando…" : existingSeg ? "Actualizar momento" : "Guardar momento"}
           </button>

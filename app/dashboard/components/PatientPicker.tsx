@@ -79,14 +79,14 @@ export default function PatientPicker({ selectedId, onSelect }: Props) {
             value={search}
             placeholder="Buscar por ID, etnia, IMC…"
             onChange={(e) => setSearch(e.target.value)}
-            className="w-56 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-56 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
           />
 
           <select
             value={filterOutcome}
             onChange={(e) => setFilterOutcome(e.target.value as typeof filterOutcome)}
             aria-label="Filtrar por desenlace"
-            className="cursor-pointer rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="cursor-pointer rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
           >
             <option value="all">Todos los desenlaces</option>
             <option value="Normotensa">Normotensa</option>
@@ -119,8 +119,8 @@ export default function PatientPicker({ selectedId, onSelect }: Props) {
                     role="option"
                     aria-selected={isSel}
                     onClick={() => onSelect(p.paciente_id)}
-                    className={`flex w-full cursor-pointer items-center justify-between gap-2 border-b border-slate-100 px-4 py-2.5 text-left text-sm transition-colors last:border-b-0 hover:bg-blue-50 focus:bg-blue-50 focus:outline-none ${
-                      isSel ? "bg-blue-50" : ""
+                    className={`flex w-full cursor-pointer items-center justify-between gap-2 border-b border-slate-100 px-4 py-2.5 text-left text-sm transition-colors last:border-b-0 hover:bg-accent-soft focus:bg-accent-soft focus:outline-none ${
+                      isSel ? "bg-accent-soft" : ""
                     }`}
                   >
                     <span className="flex items-center gap-3">

@@ -1,33 +1,24 @@
 import type { Metadata } from "next";
-import { Fira_Code, Fira_Sans, Lora } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const lora = Lora({
-  variable: "--font-lora",
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
   display: "swap",
 });
 
-const firaSans = Fira_Sans({
-  variable: "--font-fira-sans",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
-
-const firaCode = Fira_Code({
-  variable: "--font-fira-code",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Gestadinamia | Investigación en Salud Materna",
+  title: "Gestadinamia | Investigación en salud materna",
   description:
-    "Nuestro compromiso es avanzar en la salud materna a través de la investigación y el conocimiento. Grupo de investigación enfocado en preeclampsia.",
-  keywords: ["preeclampsia", "Gestadinamia", "investigación", "salud materna"],
+    "Grupo de investigación en salud materna y fetal, con foco en preeclampsia y trastornos hipertensivos del embarazo. Ciencia colaborativa aplicada a decisiones clínicas.",
+  keywords: ["preeclampsia", "Gestadinamia", "investigación", "salud materna", "THAE"],
 };
 
 export default function RootLayout({
@@ -37,9 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body
-        className={`${lora.variable} ${firaSans.variable} ${firaCode.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>

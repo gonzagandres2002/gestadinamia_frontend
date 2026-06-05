@@ -1,14 +1,34 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary: #125C28;
-  --color-primary-light: #1C8F3E;
-  --color-text: #0D141A;
-  --color-gray-light: #f7f7f7;
-  --color-gray-border: #e5e5e5;
-  --font-serif: var(--font-lora);
-  --font-sans: var(--font-fira-sans);
-  --font-mono: var(--font-fira-code);
+  /* ── Typography ───────────────────────────────────────────── */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ── Brand green (deep, for strong fills) ─────────────────── */
+  --color-primary: #14622b;
+  --color-primary-light: #1c8f3e;
+
+  /* ── Accent: single restrained green, AA on white ─────────── */
+  --color-accent: #1b7a41;
+  --color-accent-strong: #14532a;
+  --color-accent-soft: #eaf4ed;
+
+  /* ── Neutrals: calm, faintly green-tinted, one family ─────── */
+  --color-ink: #0e1714;
+  --color-text: #0e1714;
+  --color-muted: #586a62;
+  --color-background: #fbfcfb;
+  --color-surface: #ffffff;
+  --color-gray-light: #f4f7f5;
+  --color-gray-border: #e6eae7;
+  --color-line: #ecefed;
+}
+
+:root {
+  /* Physical, settle-not-bounce easing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
@@ -16,23 +36,36 @@ html {
 }
 
 body {
-  background-color: #ffffff;
+  background-color: var(--color-background);
   color: var(--color-text);
-  font-family: var(--font-serif), ui-serif, Georgia, serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* Dashboard area uses sans-serif (Fira Sans) for data density & legibility */
+/* Keep .font-sans / .font-mono semantics for existing markup */
 .font-sans {
-  font-family: var(--font-fira-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-sans);
 }
 
 .font-mono {
-  font-family: var(--font-fira-code), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
+::selection {
+  background: color-mix(in oklab, var(--color-primary) 16%, transparent);
+}
+
+/* Motion is driven by the `motion` library, which honors prefers-reduced-motion
+   via useReducedMotion(). This guard covers any remaining CSS transitions. */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

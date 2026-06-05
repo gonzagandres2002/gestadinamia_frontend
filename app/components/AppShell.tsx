@@ -122,7 +122,7 @@ export default function AppShell({
     return (
       <div className="flex min-h-dvh items-center justify-center bg-slate-50">
         <div className="flex items-center gap-3 text-sm text-slate-500">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-blue-700" />
+          <span className="h-2 w-2 animate-pulse rounded-full bg-accent" />
           Cargando panel clínico…
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function AppShell({
     <div className="flex min-h-dvh bg-slate-50 font-sans text-slate-900">
       <a
         href="#contenido"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-blue-800 focus:shadow-md focus:ring-2 focus:ring-blue-500"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-accent-strong focus:shadow-md focus:ring-2 focus:ring-accent"
       >
         Saltar al contenido
       </a>
@@ -158,7 +158,7 @@ export default function AppShell({
           <Link href="/" className="flex items-center gap-2.5">
             <Image src="/images/logo.png" alt="Gestadinamia" width={32} height={32} className="h-8 w-auto" />
             <span className="leading-tight">
-              <span className="block text-sm font-semibold text-blue-900">Gestadinamia</span>
+              <span className="block text-sm font-semibold text-accent-strong">Gestadinamia</span>
               <span className="block text-[11px] uppercase tracking-wider text-slate-500">
                 Panel clínico
               </span>
@@ -170,7 +170,7 @@ export default function AppShell({
           {NAV.map((group, gi) => (
             <div key={group.label ?? `group-${gi}`} className="space-y-1">
               {group.label && (
-                <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
                   {group.label}
                 </p>
               )}
@@ -182,13 +182,13 @@ export default function AppShell({
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     onClick={() => setMobileOpen(false)}
-                    className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
+                    className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 ${
                       active
-                        ? "bg-blue-50 font-medium text-blue-800"
+                        ? "bg-accent-soft font-medium text-accent-strong"
                         : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
-                    <span className={active ? "text-blue-700" : "text-slate-400 group-hover:text-slate-600"}>
+                    <span className={active ? "text-accent" : "text-slate-400 group-hover:text-slate-600"}>
                       {item.icon}
                     </span>
                     <span className="leading-snug">{item.label}</span>
@@ -199,7 +199,7 @@ export default function AppShell({
           ))}
         </nav>
 
-        <div className="border-t border-slate-200 px-5 py-4 text-[11px] text-slate-400">
+        <div className="border-t border-slate-200 px-5 py-4 font-mono text-[11px] text-slate-500">
           Cohorte de 218 gestantes
         </div>
       </aside>
@@ -211,7 +211,7 @@ export default function AppShell({
             type="button"
             onClick={() => setMobileOpen(true)}
             aria-label="Abrir menú"
-            className="-ml-1 rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 lg:hidden"
+            className="-ml-1 rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" aria-hidden="true">
               <path d="M4 7h16M4 12h16M4 17h16" />
@@ -226,14 +226,14 @@ export default function AppShell({
             )}
             <button
               onClick={logout}
-              className="cursor-pointer rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="cursor-pointer rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:border-accent/40 hover:bg-accent-soft hover:text-accent-strong focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               Cerrar sesión
             </button>
           </div>
         </header>
 
-        <main id="contenido" className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6">
+        <main id="contenido" className="mx-auto w-full max-w-7xl flex-1 px-5 py-8 sm:px-8 sm:py-10">
           {children}
         </main>
 

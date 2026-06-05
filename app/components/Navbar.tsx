@@ -43,47 +43,39 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="fixed top-0 w-full z-50 border-b border-emerald-200/20 bg-[#0b2f1a]/82 backdrop-blur-xl">
-      <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3.5">
+    <nav className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0a1f12]/70 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-10">
         <a href="#inicio" className="flex items-center gap-3">
-          <Image
-            src="/images/logo.png"
-            alt="Gestadinamia logo"
-            width={40}
-            height={40}
-            className="h-10 w-auto"
-          />
-          <span className="hidden text-lg font-semibold text-white sm:inline">
-            Gestadinamia
-          </span>
+          <Image src="/images/logo.png" alt="Gestadinamia" width={36} height={36} className="h-9 w-auto" />
+          <span className="text-[15px] font-semibold tracking-tight text-white">Gestadinamia</span>
         </a>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-3">
-          <ul className="flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-2 py-1">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="inline-flex rounded-full px-4 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/12 hover:text-white"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+        <div className="hidden items-center gap-1 md:flex">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="rounded-full px-4 py-2 text-[13.5px] font-medium text-white/70 transition-colors duration-200 hover:text-white"
+            >
+              {link.label}
+            </a>
+          ))}
+
+          <div className="mx-3 h-5 w-px bg-white/15" />
 
           {isLoggedIn ? (
             <div className="flex items-center gap-2">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center justify-center rounded-full bg-emerald-500/90 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-500"
+                className="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-[13.5px] font-medium text-[#0a1f12] shadow-sm transition-[transform,box-shadow] duration-300 ease-out hover:shadow-md active:scale-[0.97]"
+                style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
               >
                 Dashboard clínico
               </Link>
               <button
                 onClick={handleLogout}
-                className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/8 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/15"
+                className="rounded-full px-3 py-2 text-[13.5px] font-medium text-white/60 transition-colors duration-200 hover:text-white"
               >
                 Salir
               </button>
@@ -91,9 +83,10 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="inline-flex items-center justify-center rounded-full border border-emerald-200/40 bg-emerald-300/15 px-4 py-2 text-sm font-medium text-emerald-100 transition-colors hover:bg-emerald-300/25"
+              className="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-[13.5px] font-medium text-[#0a1f12] shadow-sm transition-[transform,box-shadow] duration-300 ease-out hover:shadow-md active:scale-[0.97]"
+              style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
             >
-              Iniciar sesion
+              Iniciar sesión
             </Link>
           )}
         </div>
@@ -101,49 +94,44 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden flex flex-col gap-1.5 rounded-lg border border-white/20 bg-white/10 p-2"
-          aria-label="Toggle menu"
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-white md:hidden"
+          aria-label="Abrir menú"
+          aria-expanded={menuOpen}
         >
-          <span
-            className={`block h-0.5 w-6 bg-white transition-transform ${menuOpen ? "translate-y-2 rotate-45" : ""}`}
-          />
-          <span
-            className={`block h-0.5 w-6 bg-white transition-opacity ${menuOpen ? "opacity-0" : ""}`}
-          />
-          <span
-            className={`block h-0.5 w-6 bg-white transition-transform ${menuOpen ? "-translate-y-2 -rotate-45" : ""}`}
-          />
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" aria-hidden="true">
+            {menuOpen ? <path d="M18 6 6 18M6 6l12 12" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+          </svg>
         </button>
       </div>
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="border-t border-white/15 bg-[#0b2f1a]/95 md:hidden">
-          <ul className="flex flex-col gap-2 px-6 py-4">
+        <div className="border-t border-white/10 bg-[#0a1f12]/95 backdrop-blur-xl md:hidden">
+          <ul className="flex flex-col gap-1 px-6 py-4">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                  className="block rounded-lg px-3 py-2.5 font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white"
                 >
                   {link.label}
                 </a>
               </li>
             ))}
-            <li className="pt-1">
+            <li className="mt-2 border-t border-white/10 pt-3">
               {isLoggedIn ? (
                 <div className="flex flex-col gap-2">
                   <Link
                     href="/dashboard"
                     onClick={() => setMenuOpen(false)}
-                    className="block rounded-lg bg-emerald-500/90 px-3 py-2 font-medium text-white transition-colors hover:bg-emerald-500"
+                    className="block rounded-lg bg-white px-3 py-2.5 text-center font-medium text-[#0a1f12]"
                   >
                     Dashboard clínico
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="block w-full rounded-lg border border-white/20 px-3 py-2 text-left font-medium text-white/70 transition-colors hover:bg-white/10"
+                    className="block w-full rounded-lg px-3 py-2.5 text-left font-medium text-white/60 transition-colors hover:bg-white/5 hover:text-white"
                   >
                     Cerrar sesión
                   </button>
@@ -152,9 +140,9 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg border border-emerald-200/35 bg-emerald-300/15 px-3 py-2 font-medium text-emerald-100 transition-colors hover:bg-emerald-300/25"
+                  className="block rounded-lg bg-white px-3 py-2.5 text-center font-medium text-[#0a1f12]"
                 >
-                  Iniciar sesion
+                  Iniciar sesión
                 </Link>
               )}
             </li>

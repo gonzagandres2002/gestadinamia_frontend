@@ -249,7 +249,7 @@ export default function RiskSummaryCard({ pacienteId, refreshKey }: Props) {
       </div>
 
       {lastSeg?.pam_mmhg != null && (pamRankNorm != null || pamRankThae != null) && (
-        <p className="mb-3 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-900">
+        <p className="mb-3 rounded-lg border border-accent/30 bg-accent-soft px-3 py-2 text-xs text-accent-strong">
           <strong>Posicionamiento (PAM, M{lastSeg.momento}):</strong>{" "}
           percentil ≈ <span className="font-semibold">{pamRankNorm ?? "—"}</span> del subgrupo Normotensa ·
           percentil ≈ <span className="font-semibold">{pamRankThae ?? "—"}</span> del subgrupo THAE.

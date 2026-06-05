@@ -1,87 +1,76 @@
 import Image from "next/image";
+import { Reveal, RevealGroup, RevealItem, Lift } from "./Reveal";
+
+const facts = [
+  { k: "Línea principal", v: "Preeclampsia y salud fetal" },
+  { k: "Modelo de trabajo", v: "Investigación, clínica y academia" },
+];
 
 export default function About() {
   return (
-    <section
-      id="sobre-nosotros"
-      className="scroll-mt-20 relative overflow-hidden py-20 px-6 lg:px-16"
-    >
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,#ffffff_0%,#f3f9f5_55%,#ffffff_100%)]"
-      />
-
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-6 flex items-center justify-center gap-4">
-          <span className="h-px w-12 bg-primary/40" />
-          <p className="text-sm uppercase tracking-[0.16em] text-primary/80">
-            Sobre Nosotros
+    <section id="sobre-nosotros" className="scroll-mt-24 px-6 py-20 lg:px-10 lg:py-24">
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <p className="text-[12px] font-medium uppercase tracking-[0.18em] text-accent">
+            Sobre nosotros
           </p>
-          <span className="h-px w-12 bg-primary/40" />
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+        <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
           <div>
-            <h2 className="mb-6 max-w-2xl text-3xl font-semibold leading-[1.1] text-text lg:text-5xl">
-              Ciencia colaborativa para decisiones clínicas más seguras
-            </h2>
+            <Reveal>
+              <h2 className="max-w-2xl text-balance text-4xl font-semibold leading-[1.02] tracking-[-0.03em] text-ink sm:text-5xl lg:text-6xl">
+                Ciencia colaborativa para decisiones clínicas más seguras
+              </h2>
+            </Reveal>
 
-            <p className="mb-8 max-w-2xl text-base leading-relaxed text-text/80 sm:text-lg">
-            Somos un equipo{" "}
-            <strong className="text-text">multidisciplinario</strong> de
-            investigadores comprometidos con la{" "}
-            <strong className="text-text">salud materna y fetal</strong>,
-            especialmente enfocados en{" "}
-            <strong className="text-text">
-              mejorar el diagnóstico y manejo de enfermedades
-            </strong>{" "}
-            durante el <strong className="text-text">embarazo</strong>, como la
-            preeclampsia. Este proyecto de investigación es liderado por el Grupo
-            Reproducción de la Universidad de Antioquia, en colaboración con
-            destacados <strong className="text-text">expertos</strong> de la
-            Universidad Cooperativa de Colombia y la Corporación Universitaria
-            Remington. Además con el apoyo{" "}
-            <strong className="text-text">internacional</strong> del{" "}
-            <strong className="text-text">Hospital Universitario de Jena</strong>
-            .
-          </p>
+            <Reveal delay={0.08}>
+              <p className="mt-8 max-w-xl text-pretty text-lg leading-relaxed text-muted">
+                Somos un equipo multidisciplinario de investigadores enfocados en la salud
+                materna y fetal, especialmente en mejorar el diagnóstico y el manejo de
+                enfermedades del embarazo como la preeclampsia. El proyecto es liderado por el
+                Grupo Reproducción de la Universidad de Antioquia, junto a la Universidad
+                Cooperativa de Colombia y la Corporación Universitaria Remington, con el apoyo
+                internacional del Hospital Universitario de Jena.
+              </p>
+            </Reveal>
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="rounded-xl border-l-4 border-primary bg-white p-4 shadow-sm">
-                <p className="mb-1 text-sm text-text/65">Línea principal</p>
-                <p className="text-sm font-semibold text-primary">Preeclampsia y salud fetal</p>
-              </div>
-              <div className="rounded-xl border-l-4 border-primary bg-white p-4 shadow-sm">
-                <p className="mb-1 text-sm text-text/65">Modelo de trabajo</p>
-                <p className="text-sm font-semibold text-primary">Investigación + clínica + academia</p>
-              </div>
-            </div>
+            <RevealGroup className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2" stagger={0.1}>
+              {facts.map((fact) => (
+                <RevealItem key={fact.k}>
+                  <Lift className="h-full rounded-2xl border border-gray-border bg-surface px-5 py-5">
+                    <p className="text-[12px] uppercase tracking-[0.12em] text-muted">{fact.k}</p>
+                    <p className="mt-1.5 text-[15px] font-medium text-ink">{fact.v}</p>
+                  </Lift>
+                </RevealItem>
+              ))}
+            </RevealGroup>
           </div>
 
-          <div className="relative flex items-start justify-center lg:justify-end">
-            <div className="relative w-full max-w-md">
-              <div className="absolute -inset-3 -z-10 rounded-3xl border border-primary/15 bg-white/60" />
+          <Reveal delay={0.1} y={28}>
+            <div className="relative mx-auto w-full max-w-md lg:ml-auto lg:mr-0">
+              <Lift amount={-6}>
+                <Image
+                  src="/images/about.png"
+                  alt="Equipo de investigación Gestadinamia"
+                  width={540}
+                  height={420}
+                  className="w-full rounded-3xl object-cover shadow-[0_28px_70px_-24px_rgba(14,23,20,0.34)]"
+                />
+              </Lift>
 
-              <Image
-                src="/images/about.png"
-                alt="Equipo de investigación Gestadinamia"
-                width={540}
-                height={420}
-                className="w-full rounded-3xl border border-white/80 object-cover shadow-[0_20px_46px_rgba(13,20,26,0.14)]"
-              />
-
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-gray-border bg-white p-3 text-center">
-                  <p className="text-xl font-semibold text-primary">4+</p>
-                  <p className="text-xs text-text/70">Instituciones vinculadas</p>
+              <div className="mt-5 grid grid-cols-2 gap-4">
+                <div className="rounded-2xl border border-gray-border bg-surface px-5 py-4">
+                  <p className="font-mono text-2xl font-semibold text-accent">4+</p>
+                  <p className="mt-0.5 text-[13px] text-muted">Instituciones vinculadas</p>
                 </div>
-                <div className="rounded-xl border border-gray-border bg-white p-3 text-center">
-                  <p className="text-xl font-semibold text-primary">1</p>
-                  <p className="text-xs text-text/70">Foco clínico prioritario</p>
+                <div className="rounded-2xl border border-gray-border bg-surface px-5 py-4">
+                  <p className="font-mono text-2xl font-semibold text-accent">1</p>
+                  <p className="mt-0.5 text-[13px] text-muted">Foco clínico prioritario</p>
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>
