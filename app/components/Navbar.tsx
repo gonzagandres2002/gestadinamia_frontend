@@ -3,17 +3,16 @@
 import { useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const navLinks = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Sobre nosotros", href: "#sobre-nosotros" },
-  { label: "Colaboradores", href: "#colaboradores" },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Inicio", href: "/" },
+  { label: "Sobre nosotros", href: "/sobre-nosotros" },
+  { label: "Investigación", href: "/investigacion" },
+  { label: "Blog", href: "/blog" },
+  { label: "Participa", href: "/participa" },
 ];
 
-// Fired on logout so the navbar updates without a full reload (same-tab
-// localStorage writes don't emit a native "storage" event).
 const AUTH_EVENT = "gestadinamia-auth-change";
 
 function subscribeAuth(callback: () => void) {
@@ -27,12 +26,17 @@ function subscribeAuth(callback: () => void) {
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const isLoggedIn = useSyncExternalStore(
     subscribeAuth,
     () => !!localStorage.getItem("gestadinamia_token"),
     () => false,
   );
+
+  // The home hero is dark, so the bar floats transparent there; every other
+  // page is light, so the bar turns solid for legibility.
+  const onHero = pathname === "/";
 
   function handleLogout() {
     localStorage.removeItem("gestadinamia_token");
@@ -42,59 +46,77 @@ export default function Navbar() {
     router.push("/");
   }
 
+  function isActive(href: string) {
+    return href === "/" ? pathname === "/" : pathname.startsWith(href);
+  }
+
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0a1f12]/70 backdrop-blur-xl">
+    <nav
+      className={`fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl ${
+        onHero ? "border-white/10 bg-[#0a1f12]/70" : "border-gray-border bg-surface/85"
+      }`}
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-10">
-        <a href="#inicio" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3">
           <Image src="/images/logo.png" alt="Gestadinamia" width={36} height={36} className="h-9 w-auto" />
-          <span className="text-[15px] font-semibold tracking-tight text-white">Gestadinamia</span>
-        </a>
+          <span className={`text-[15px] font-semibold tracking-tight ${onHero ? "text-white" : "text-ink"}`}>
+            Gestadinamia
+          </span>
+        </Link>
 
         {/* Desktop nav */}
         <div className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="rounded-full px-4 py-2 text-[13.5px] font-medium text-white/70 transition-colors duration-200 hover:text-white"
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const active = isActive(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                className={`rounded-full px-4 py-2 text-[13.5px] font-medium transition-colors duration-200 ${
+                  onHero
+                    ? active
+                      ? "text-white"
+                      : "text-white/65 hover:text-white"
+                    : active
+                      ? "text-ink"
+                      : "text-muted hover:text-ink"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
 
-          <div className="mx-3 h-5 w-px bg-white/15" />
+          <div className={`mx-3 h-5 w-px ${onHero ? "bg-white/15" : "bg-gray-border"}`} />
 
           {isLoggedIn ? (
             <div className="flex items-center gap-2">
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-[13.5px] font-medium text-[#0a1f12] shadow-sm transition-[transform,box-shadow] duration-300 ease-out hover:shadow-md active:scale-[0.97]"
-                style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
-              >
+              <CtaLink href="/dashboard" onHero={onHero}>
                 Dashboard clínico
-              </Link>
+              </CtaLink>
               <button
                 onClick={handleLogout}
-                className="rounded-full px-3 py-2 text-[13.5px] font-medium text-white/60 transition-colors duration-200 hover:text-white"
+                className={`rounded-full px-3 py-2 text-[13.5px] font-medium transition-colors duration-200 ${
+                  onHero ? "text-white/60 hover:text-white" : "text-muted hover:text-ink"
+                }`}
               >
                 Salir
               </button>
             </div>
           ) : (
-            <Link
-              href="/login"
-              className="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-[13.5px] font-medium text-[#0a1f12] shadow-sm transition-[transform,box-shadow] duration-300 ease-out hover:shadow-md active:scale-[0.97]"
-              style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
-            >
+            <CtaLink href="/login" onHero={onHero}>
               Iniciar sesión
-            </Link>
+            </CtaLink>
           )}
         </div>
 
         {/* Mobile hamburger */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-white md:hidden"
+          className={`flex h-9 w-9 items-center justify-center rounded-lg border md:hidden ${
+            onHero ? "border-white/15 bg-white/5 text-white" : "border-gray-border bg-surface text-ink"
+          }`}
           aria-label="Abrir menú"
           aria-expanded={menuOpen}
         >
@@ -106,32 +128,42 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="border-t border-white/10 bg-[#0a1f12]/95 backdrop-blur-xl md:hidden">
+        <div
+          className={`border-t backdrop-blur-xl md:hidden ${
+            onHero ? "border-white/10 bg-[#0a1f12]/95" : "border-gray-border bg-surface/95"
+          }`}
+        >
           <ul className="flex flex-col gap-1 px-6 py-4">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <a
+                <Link
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2.5 font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white"
+                  className={`block rounded-lg px-3 py-2.5 font-medium transition-colors ${
+                    onHero
+                      ? "text-white/80 hover:bg-white/5 hover:text-white"
+                      : "text-muted hover:bg-gray-light hover:text-ink"
+                  }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
-            <li className="mt-2 border-t border-white/10 pt-3">
+            <li className={`mt-2 border-t pt-3 ${onHero ? "border-white/10" : "border-gray-border"}`}>
               {isLoggedIn ? (
                 <div className="flex flex-col gap-2">
                   <Link
                     href="/dashboard"
                     onClick={() => setMenuOpen(false)}
-                    className="block rounded-lg bg-white px-3 py-2.5 text-center font-medium text-[#0a1f12]"
+                    className="block rounded-lg bg-primary px-3 py-2.5 text-center font-medium text-white"
                   >
                     Dashboard clínico
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="block w-full rounded-lg px-3 py-2.5 text-left font-medium text-white/60 transition-colors hover:bg-white/5 hover:text-white"
+                    className={`block w-full rounded-lg px-3 py-2.5 text-left font-medium transition-colors ${
+                      onHero ? "text-white/60 hover:bg-white/5 hover:text-white" : "text-muted hover:bg-gray-light hover:text-ink"
+                    }`}
                   >
                     Cerrar sesión
                   </button>
@@ -140,7 +172,7 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg bg-white px-3 py-2.5 text-center font-medium text-[#0a1f12]"
+                  className="block rounded-lg bg-primary px-3 py-2.5 text-center font-medium text-white"
                 >
                   Iniciar sesión
                 </Link>
@@ -150,5 +182,19 @@ export default function Navbar() {
         </div>
       )}
     </nav>
+  );
+}
+
+function CtaLink({ href, onHero, children }: { href: string; onHero: boolean; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-[13.5px] font-medium shadow-sm transition-[transform,box-shadow,background-color] duration-300 ease-out hover:shadow-md active:scale-[0.97] ${
+        onHero ? "bg-white text-[#0a1f12]" : "bg-primary text-white hover:bg-primary-light"
+      }`}
+      style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
+    >
+      {children}
+    </Link>
   );
 }

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Reveal } from "./Reveal";
 
 const socials = [
@@ -19,6 +20,14 @@ const socials = [
   },
 ];
 
+const navLinks = [
+  { label: "Sobre nosotros", href: "/sobre-nosotros" },
+  { label: "Investigación", href: "/investigacion" },
+  { label: "Beneficios", href: "/beneficios" },
+  { label: "Blog", href: "/blog" },
+  { label: "Participa", href: "/participa" },
+];
+
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-[#08180e] px-6 py-16 text-white lg:px-10">
@@ -28,39 +37,39 @@ export default function Footer() {
       />
 
       <div className="mx-auto max-w-6xl">
-        <Reveal className="grid grid-cols-1 gap-12 md:grid-cols-[1.3fr_0.7fr] md:gap-16">
+        <Reveal className="grid grid-cols-1 gap-12 md:grid-cols-[1.4fr_0.8fr_0.8fr] md:gap-12">
           <div>
-            <a href="#inicio" className="inline-flex items-center gap-3">
-              <Image
-                src="/images/logo.png"
-                alt="Gestadinamia"
-                width={40}
-                height={40}
-                className="h-10 w-auto brightness-0 invert"
-              />
+            <Link href="/" className="inline-flex items-center gap-3">
+              <Image src="/images/logo.png" alt="Gestadinamia" width={40} height={40} className="h-10 w-auto brightness-0 invert" />
               <span className="text-lg font-semibold tracking-tight">Gestadinamia</span>
-            </a>
-            <p className="mt-5 max-w-md text-pretty text-[15px] leading-relaxed text-white/65">
+            </Link>
+            <p className="mt-5 max-w-sm text-pretty text-[15px] leading-relaxed text-white/65">
               Investigación colaborativa para fortalecer el cuidado materno y fetal, con enfoque
               científico en preeclampsia y embarazo.
             </p>
           </div>
 
+          <nav aria-label="Navegación del sitio">
+            <h4 className="text-[12px] font-medium uppercase tracking-[0.16em] text-emerald-200/80">Navegación</h4>
+            <ul className="mt-4 space-y-2.5 text-[15px] text-white/70">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="transition-colors hover:text-emerald-200">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <div>
-            <h4 className="text-[12px] font-medium uppercase tracking-[0.16em] text-emerald-200/80">
-              Contacto directo
-            </h4>
+            <h4 className="text-[12px] font-medium uppercase tracking-[0.16em] text-emerald-200/80">Contacto directo</h4>
             <div className="mt-4 space-y-2 text-[15px] text-white/70">
               <p>Carrera 62 # 52-59</p>
               <a href="mailto:luisfer_uda@yahoo.com" className="block transition-colors hover:text-emerald-200">
                 luisfer_uda@yahoo.com
               </a>
-              <a
-                href="https://wa.me/573145789702"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block transition-colors hover:text-emerald-200"
-              >
+              <a href="https://wa.me/573145789702" target="_blank" rel="noopener noreferrer" className="block transition-colors hover:text-emerald-200">
                 +57 314 578 9702
               </a>
             </div>
@@ -86,9 +95,9 @@ export default function Footer() {
 
         <div className="mt-16 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-7 text-[13px] text-white/55 sm:flex-row">
           <p>© 2026 Gestadinamia. Todos los derechos reservados.</p>
-          <a href="#inicio" className="transition-colors hover:text-emerald-200">
+          <Link href="/" className="transition-colors hover:text-emerald-200">
             Volver al inicio
-          </a>
+          </Link>
         </div>
       </div>
     </footer>
