@@ -60,6 +60,25 @@ export default async function ArticlePage({
 
       <div className="px-6 py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-3xl">
+          {post.videoId && (
+            <Reveal>
+              <div className="mb-14">
+                <p className="mb-5 text-[12px] font-medium uppercase tracking-[0.16em] text-accent">
+                  Ver en video
+                </p>
+                <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-gray-light shadow-[0_4px_32px_rgba(0,0,0,0.07)]">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${post.videoId}`}
+                    title={post.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="absolute inset-0 h-full w-full"
+                  />
+                </div>
+              </div>
+            </Reveal>
+          )}
+
           <Reveal>
             <div className="space-y-10">
               {post.sections.map((section, i) => (
@@ -86,25 +105,6 @@ export default async function ArticlePage({
               ))}
             </div>
           </Reveal>
-
-          {post.videoId && (
-            <Reveal>
-              <div className="mt-14">
-                <p className="mb-5 text-[12px] font-medium uppercase tracking-[0.16em] text-accent">
-                  Ver en video
-                </p>
-                <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-gray-light shadow-[0_4px_32px_rgba(0,0,0,0.07)]">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${post.videoId}`}
-                    title={post.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="absolute inset-0 h-full w-full"
-                  />
-                </div>
-              </div>
-            </Reveal>
-          )}
 
           <Reveal>
             <div className="mt-14 border-t border-line pt-10">
