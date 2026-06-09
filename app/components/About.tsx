@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { Reveal, RevealGroup, RevealItem, Lift } from "./Reveal";
+import LabCarousel from "./LabCarousel";
 
 const facts = [
   { k: "Línea principal", v: "Preeclampsia y salud fetal" },
@@ -48,18 +48,10 @@ export default function About() {
           </div>
 
           <Reveal delay={0.1} y={28}>
-            <div className="relative mx-auto w-full max-w-md lg:ml-auto lg:mr-0">
-              <Lift amount={-6}>
-                <Image
-                  src="/images/about.png"
-                  alt="Equipo de investigación Gestadinamia"
-                  width={540}
-                  height={420}
-                  className="w-full rounded-3xl object-cover shadow-[0_28px_70px_-24px_rgba(14,23,20,0.34)]"
-                />
-              </Lift>
+            <div className="relative w-full">
+              <LabCarousel />
 
-              <div className="mt-5 grid grid-cols-2 gap-4">
+              <div className="mx-auto mt-8 grid w-full max-w-md grid-cols-2 gap-4 lg:ml-auto lg:mr-0">
                 <div className="rounded-2xl border border-gray-border bg-surface px-5 py-4">
                   <p className="font-mono text-2xl font-semibold text-accent">4+</p>
                   <p className="mt-0.5 text-[13px] text-muted">Instituciones vinculadas</p>
